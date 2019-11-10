@@ -4,14 +4,17 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    //Make the GameManager a singleton
     public static GameManager instance = null;
+    //Get access to the BoardManager
     public BoardManager boardScript;
 
     private int level = 3;
 
-    // Start is called before the first frame update
+    // Awake is called before the first frame update
     void Awake()
     {
+        //Create the GameManager if one does not exist, else destroy the existing one
         if (instance == null)
         {
             instance = this;
@@ -19,6 +22,7 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+        //Keep the GameManager through all levels
         DontDestroyOnLoad(gameObject);
         boardScript = GetComponent<BoardManager>();
         InitGame();
@@ -26,6 +30,7 @@ public class GameManager : MonoBehaviour
 
     void InitGame()
     {
+        //Setup the board
        boardScript.SetupScene(level);
     }
 
