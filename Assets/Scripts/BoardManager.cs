@@ -29,6 +29,7 @@ public class BoardManager : MonoBehaviour
     public GameObject[] floorTiles;
     public GameObject[] wallTiles;
     public GameObject[] outerWallTiles;
+    public GameObject[] enemyTiles;
 
     //Board object
     private Transform boardHolder;
@@ -64,7 +65,7 @@ public class BoardManager : MonoBehaviour
                 //Make walls on the outer edges
                 if (x == -1 || x == columns || y == -1 || y == rows)
                 {
-                    toInstatiate = wallTiles[Random.Range(0, outerWallTiles.Length)];
+                    toInstatiate = outerWallTiles[Random.Range(0, outerWallTiles.Length)];
                 }
                 //Instantiate the object as a child of the board
                 GameObject instance = Instantiate(toInstatiate, new Vector3(x, y, 0f), Quaternion.identity) as GameObject;
@@ -101,7 +102,11 @@ public class BoardManager : MonoBehaviour
         BoardSetup();
         InitializeList();
 
+
+        //Test for object spawning
         LayoutObjectAtRandom(wallTiles, wallCount.minimum, wallCount.maximum);
+        int enemyCount = (int)Mathf.Log(level, 2f);
+        LayoutObjectAtRandom (enemyTiles, enemyCount, enemyCount);
     }
 
 }
