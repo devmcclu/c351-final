@@ -9,6 +9,10 @@ public class GameManager : MonoBehaviour
     //Get access to the BoardManager
     public BoardManager boardScript;
 
+    public int playerHealth = 100;
+
+    [HideInInspector] public bool playersTurn = true;
+
     private int level = 3;
 
     // Awake is called before the first frame update
@@ -32,6 +36,11 @@ public class GameManager : MonoBehaviour
     {
         //Setup the board
        boardScript.SetupScene(level);
+    }
+
+    public void GameOver()
+    {
+        enabled = false;
     }
 
     // Update is called once per frame
