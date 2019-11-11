@@ -43,8 +43,9 @@ public class BoardManager : MonoBehaviour
 
         for (int x = 1; x < columns - 1; x++)
         {
-            for (int y = 1; x < rows - 1; y++)
+            for (int y = 1; y < rows - 1; y++)
             {
+                //Debug.Log(gridPositions.Count);
                 gridPositions.Add(new Vector3(x, y, 0f));
             }
         }
