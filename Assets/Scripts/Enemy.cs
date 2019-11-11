@@ -14,6 +14,7 @@ public class Enemy : MovingObject
 
     protected override void Start()
     {
+        GameManager.instance.AddEnemyToList(this);
         //Get the player object's position
         target = GameObject.FindGameObjectWithTag("Player").transform;
         base.Start();
