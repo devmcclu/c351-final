@@ -34,7 +34,7 @@ public class Player : MovingObject
         }
         if (horizontal != 0 || vertical != 0)
         {
-            //AttemptMove<Wall>(horizontal, vertical);
+            AttemptMove<Enemy>(horizontal, vertical);
         }
     }
 
