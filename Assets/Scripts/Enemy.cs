@@ -15,6 +15,8 @@ public class Enemy : MovingObject
     //Use minimax or not
     private bool useMinimax = false;
 
+    public int speed = 1;
+
     protected override void Start()
     {
         GameManager.instance.AddEnemyToList(this);
@@ -59,11 +61,11 @@ public class Enemy : MovingObject
             //Else, move on the x coord
             if (Mathf.Abs(target.position.x - transform.position.x) < float.Epsilon)
             {
-                yDir = target.position.y > transform.position.y ? 1 : -1;
+                yDir = target.position.y > transform.position.y ? speed : -speed;
             }
             else
             {
-                xDir = target.position.x > transform.position.x ? 1 : -1;
+                xDir = target.position.x > transform.position.x ? speed : -speed;
             }
         }
         AttemptMove<Player>(xDir, yDir);
