@@ -69,10 +69,10 @@ public class Enemy : MovingObject
         AttemptMove<Player>(xDir, yDir);
     }
 
-    //Returns a new State object representing the current state of play
+    //Returns a new State object representing the current state of play. Assumes it is enemy's turn and not skipped.
     private State CurrentState()
     {
-        return null;
+        return new State(GameManager.instance.objectPositions, 1, false);
     }
 
     //Returns an array of 3 doubles. returnArray[0] = value, returnArray[1] = xDir of best move, returnArray[2] = yDir of best move.
