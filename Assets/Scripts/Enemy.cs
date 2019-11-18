@@ -72,7 +72,7 @@ public class Enemy : MovingObject
     //Returns a new State object representing the current state of play
     private State CurrentState()
     {
-
+        return null;
     }
 
     //Returns an array of 3 doubles. returnArray[0] = value, returnArray[1] = xDir of best move, returnArray[2] = yDir of best move.
@@ -88,7 +88,7 @@ public class Enemy : MovingObject
         }
         //Console.WriteLine(basicHeuristic());
         //return new double[] { 1, 0, 1 };
-        
+        return null;
     }
 
     //Needs to be written. Specification: -1 = player win, 0 = tie, 1 = zombie win, 0.1 = no result yet
@@ -104,6 +104,7 @@ public class Enemy : MovingObject
     private double basicHeuristic(State state)
     {
         //Fill in
+        return 0;
     }
 
     /** Wrong, please ignore
