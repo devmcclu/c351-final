@@ -105,8 +105,131 @@ public class Enemy : MovingObject
     }
     private double basicHeuristic(State state)
     {
+        double score = 0;
         //Fill in
-        return 0;
+        score += Mathf.Abs((this.transform.position.x - target.position.x) + (this.transform.position.y - target.position.y));
+        //Same x
+        if(target.position.x == this.transform.position.x)
+        {
+            //Above enemy
+            if(target.position.y > this.transform.position.y)
+            {
+                for(int i = 0; i < GameManager.instance.boardScript.columns; i++)
+                {
+                    for(int j = (int)this.transform.position.y; j < (int)target.position.y + 1)
+                    {
+                        if(GameManager.instance.objectPositions[i, j].CompareTag("Wall"))
+                        {
+                            score += 2;
+                        }
+                    }
+                }
+            }
+            //Below enemy
+            else
+            {
+                for(int i = 0; i < GameManager.instance.boardScript.columns; i++)
+                {
+                    for(int j = (int)target.position.y; j < (int)this.transform.position.y + 1)
+                    {
+                        if(GameManager.instance.objectPositions[i, j].CompareTag("Wall"))
+                        {
+                            score += 2;
+                        }
+                    }
+                }
+            }
+        }
+        //Same y
+        if(target.position.y == this.transform.position.y)
+        {
+            //Right of enemy
+            if(target.position.x > this.transform.position.x)
+            {
+                for(int i = (int)this.transform.position.x; i < target.position.x + 1; i++)
+                {
+                    for(int j = 0; j < GameManager.instance.boardScript.rows; j ++)
+                    {
+                        if(GameManager.instance.objectPositions[i, j].CompareTag("Wall"))
+                        {
+                            score += 2;
+                        }
+                    }
+                }
+            }
+            //Left of enemy
+            else
+            {
+                for(int i = (int)target.position.x; i < this.transform.position.x + 1; i++)
+                {
+                    for(int j = 0; j < GameManager.instance.boardScript.rows; j ++)
+                    {
+                        if(GameManager.instance.objectPositions[i, j].CompareTag("Wall"))
+                        {
+                            score += 2;
+                        }
+                    }
+                }
+            }
+        }
+        //Above and right of enemy
+        if(target.position.x > this.transform.position.x && target.position.y > this.transform.position.y)
+        {
+            for(int i = (int)this.transform.position.x; i < target.position.x + 1; i++)
+            {
+                for(int j = (int)this.transform.position.y; j < target.position.y + 1; j ++)
+                {
+                    if(GameManager.instance.objectPositions[i, j].CompareTag("Wall"))
+                    {
+                        score += 2;
+                    }
+                }
+            }
+        }
+        //Above and left of enenmy
+        if(target.position.x > this.transform.position.x && target.position.y < this.transform.position.y)
+        {
+            for(int i = (int)this.transform.position.x; i < target.position.x + 1; i++)
+            {
+                for(int j = (int)target.position.y; j < this.transform.position.y + 1; j ++)
+                {
+                    if(GameManager.instance.objectPositions[i, j].CompareTag("Wall"))
+                    {
+                        score += 2;
+                    }
+                }
+            }
+        }
+        //Below and right of enemy
+        if(target.position.x < this.transform.position.x && target.position.y > this.transform.position.y)
+        {
+            for(int i = (int)target.position.x; i < this.transform.position.x + 1; i++)
+            {
+                for(int j = (int)this.transform.position.y; j < target.position.y + 1; j ++)
+                {
+                    if(GameManager.instance.objectPositions[i, j].CompareTag("Wall"))
+                    {
+                        score += 2;
+                    }
+                }
+            }
+        }
+        //Below and left of enemy
+        if(target.position.x < this.transform.position.x && target.position.y < this.transform.position.y)
+        {
+            for(int i = (int)target.position.x; i < this.transform.position.x + 1; i++)
+            {
+                for(int j = (int)target.position.y; j < this.transform.position.y + 1; j ++)
+                {
+                    if(GameManager.instance.objectPositions[i, j].CompareTag("Wall"))
+                    {
+                        score += 2;
+                    }
+                }
+            }
+        }
+
+        return score;
     }
 
     /** Wrong, please ignore
