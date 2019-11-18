@@ -13,7 +13,7 @@ public class Enemy : MovingObject
     //If it is the enemy turn or not
     private bool skipMove;
     //Use minimax or not
-    private bool useMinimax = true;
+    private bool useMinimax = false;
 
     protected override void Start()
     {
