@@ -107,7 +107,7 @@ public class BoardManager : MonoBehaviour
         //Test for object spawning
         LayoutObjectAtRandom(wallTiles, wallCount.minimum, wallCount.maximum);
         int enemyCount = (int)Mathf.Log(level, 2f);
-        LayoutObjectAtRandom (enemyTiles, enemyCount, enemyCount);
+        LayoutObjectAtRandom(enemyTiles, enemyCount, enemyCount);
     }
 
 }
