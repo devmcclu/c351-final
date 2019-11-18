@@ -33,10 +33,10 @@ public class Enemy : MovingObject
         }
 
         //Remove the current position of the enemy in objectPosistions
-        GameManager.instance.objectPosistions[(int)transform.position.x, (int)transform.position.y] = null;
+        GameManager.instance.objectPositions[(int)transform.position.x, (int)transform.position.y] = null;
         base.AttemptMove<T>(xDir, yDir);
         //Update the position of the enemy in objectPosistions
-        GameManager.instance.objectPosistions[(int)transform.position.x, (int)transform.position.y] = this.gameObject;
+        GameManager.instance.objectPositions[(int)transform.position.x, (int)transform.position.y] = this.gameObject;
         skipMove = true;
     }
 
@@ -72,7 +72,7 @@ public class Enemy : MovingObject
     //Returns a new State object representing the current state of play
     private State CurrentState()
     {
-        
+
     }
 
     //Returns an array of 3 doubles. returnArray[0] = value, returnArray[1] = xDir of best move, returnArray[2] = yDir of best move.
@@ -81,10 +81,10 @@ public class Enemy : MovingObject
         double outcome = gameResult(state);
         if (outcome != 0.1)
         {
-            return new double[] { outcome, 0, 0 };
+            return new double[] { outcome*1000000, 0, 0 };
         }
         if (depth == 0) {
-            double value = heuristic(state);
+            return new double[]{ heuristic(state), 0, 0 };
         }
         //Console.WriteLine(basicHeuristic());
         //return new double[] { 1, 0, 1 };
@@ -101,13 +101,18 @@ public class Enemy : MovingObject
     {
         return basicHeuristic(state);
     }
+    private double basicHeuristic(State state)
+    {
+        //Fill in
+    }
 
+    /** Wrong, please ignore
     //Just negative the taxicab distance between player and enemy
     private double basicHeuristic()
     {
         return -Mathf.Abs(target.position.x - transform.position.x) - Mathf.Abs(target.position.y - transform.position.y);
     }
-
+    */
     protected override void OnCantMove<T>(T component)
     {
         Player hitPlayer = component as Player;

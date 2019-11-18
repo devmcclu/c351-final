@@ -19,7 +19,7 @@ public class GameManager : MonoBehaviour
     private bool enemiesMoving;
 
     //Array for storing the positions of the player, walls, and enemies
-    public GameObject[,] objectPosistions;
+    public GameObject[,] objectPositions;
 
     // Awake is called before the first frame update
     void Awake()
@@ -39,12 +39,12 @@ public class GameManager : MonoBehaviour
         InitGame();
 
         //Create the array storing the current position of the player, walls, and enemies
-        objectPosistions = new GameObject[boardScript.columns, boardScript.rows];
+        objectPositions = new GameObject[boardScript.columns, boardScript.rows];
         //Set the player GameObject as the first position in the array
-        objectPosistions[0,0] = FindObjectOfType<Player>().gameObject;
+        objectPositions[0,0] = FindObjectOfType<Player>().gameObject;
         //Find the position of all the enemies and put them in the array
         for(int i = 0; i < enemies.Count; i++){
-            objectPosistions[(int)enemies[i].transform.position.x, (int)enemies[i].transform.position.y] = enemies[i].gameObject;
+            objectPositions[(int)enemies[i].transform.position.x, (int)enemies[i].transform.position.y] = enemies[i].gameObject;
         }
     }
 
