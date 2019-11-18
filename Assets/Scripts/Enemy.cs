@@ -102,10 +102,10 @@ public class Enemy : MovingObject
         return basicHeuristic(state);
     }
 
-    //Just the taxicab distance between player and enemy
+    //Just negative the taxicab distance between player and enemy
     private double basicHeuristic()
     {
-        return Mathf.Abs(target.position.x - transform.position.x) + Mathf.Abs(target.position.y - transform.position.y);
+        return -Mathf.Abs(target.position.x - transform.position.x) - Mathf.Abs(target.position.y - transform.position.y);
     }
 
     protected override void OnCantMove<T>(T component)
