@@ -116,7 +116,7 @@ public class Enemy : MovingObject
             {
                 for(int i = 0; i < GameManager.instance.boardScript.columns; i++)
                 {
-                    for(int j = (int)this.transform.position.y; j < (int)target.position.y + 1)
+                    for(int j = (int)this.transform.position.y; j < (int)target.position.y + 1; j++)
                     {
                         if(GameManager.instance.objectPositions[i, j].CompareTag("Wall"))
                         {
@@ -130,7 +130,7 @@ public class Enemy : MovingObject
             {
                 for(int i = 0; i < GameManager.instance.boardScript.columns; i++)
                 {
-                    for(int j = (int)target.position.y; j < (int)this.transform.position.y + 1)
+                    for(int j = (int)target.position.y; j < (int)this.transform.position.y + 1; j ++)
                     {
                         if(GameManager.instance.objectPositions[i, j].CompareTag("Wall"))
                         {
@@ -162,7 +162,7 @@ public class Enemy : MovingObject
             {
                 for(int i = (int)target.position.x; i < this.transform.position.x + 1; i++)
                 {
-                    for(int j = 0; j < GameManager.instance.boardScript.rows; j ++)
+                    for(int j = 0; j < GameManager.instance.boardScript.rows; j++)
                     {
                         if(GameManager.instance.objectPositions[i, j].CompareTag("Wall"))
                         {
@@ -177,7 +177,7 @@ public class Enemy : MovingObject
         {
             for(int i = (int)this.transform.position.x; i < target.position.x + 1; i++)
             {
-                for(int j = (int)this.transform.position.y; j < target.position.y + 1; j ++)
+                for(int j = (int)this.transform.position.y; j < target.position.y + 1; j++)
                 {
                     if(GameManager.instance.objectPositions[i, j].CompareTag("Wall"))
                     {
