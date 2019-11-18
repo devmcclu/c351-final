@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class Player : MovingObject
@@ -8,11 +9,14 @@ public class Player : MovingObject
     public float restartLevelDelay = 1f;
     public int health;
 
+    public Text healthText;
+
     // Start is called before the first frame update
     protected override void Start()
     {
         health = GameManager.instance.playerHealth;
         base.Start();
+        UpdateHealth();
     }
 
     // Update is called once per frame
@@ -64,7 +68,12 @@ public class Player : MovingObject
     public void HealthLoss(int loss)
     {
         health -= loss;
+        UpdateHealth();
         CheckIfGameOver();
+    }
+
+    public void UpdateHealth(){
+        healthText.text = "Health: " + health;
     }
 
     private void CheckIfGameOver ()
