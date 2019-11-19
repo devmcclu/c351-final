@@ -48,9 +48,17 @@ public class State : MonoBehaviour
             //Move if empty
             if(board[newPosition[0], newPosition[1]] == null)
             {
-
+                board[newPosition[0], newPosition[1]] = board[enemyLoc[0], enemyLoc[1]];
+                board[enemyLoc[0], enemyLoc[1]] = null;
+                enemyLoc = newPosition;
             }
-
+            
         }
+
+    }
+
+    public void makeMove(Vector2Int move)
+    {
+        
     }
 }
