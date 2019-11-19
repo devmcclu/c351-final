@@ -42,10 +42,6 @@ public class GameManager : MonoBehaviour
         objectPositions = new GameObject[boardScript.columns, boardScript.rows];
         //Set the player GameObject as the first position in the array
         objectPositions[0,0] = FindObjectOfType<Player>().gameObject;
-        //Find the position of all the enemies and put them in the array
-        for(int i = 0; i < enemies.Count; i++){
-            objectPositions[(int)enemies[i].transform.position.x, (int)enemies[i].transform.position.y] = enemies[i].gameObject;
-        }
     }
 
     void InitGame()
@@ -73,6 +69,11 @@ public class GameManager : MonoBehaviour
     public void AddEnemyToList(Enemy script)
     {
         enemies.Add(script);
+        //Find the position of all the enemies and put them in the array
+        for(int i = 0; i < enemies.Count; i++){
+            objectPositions[(int)enemies[i].transform.position.x, (int)enemies[i].transform.position.y] = enemies[i].gameObject;
+        }
+        //Debug.Log(objectPositions);
     }
 
     IEnumerator MoveEnemies()
