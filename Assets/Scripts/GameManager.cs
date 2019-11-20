@@ -42,6 +42,13 @@ public class GameManager : MonoBehaviour
         objectPositions = new GameObject[boardScript.columns, boardScript.rows];
         //Set the player GameObject as the first position in the array
         objectPositions[0,0] = FindObjectOfType<Player>().gameObject;
+        //Find all the walls
+        Wall[] walls = FindObjectsOfType<Wall>();
+        for (int i = 0; i < walls.Length; i++)
+        {
+            Wall currentWall = walls[i];
+            objectPositions[(int)currentWall.transform.position.x, (int)currentWall.transform.position.y] = currentWall.gameObject;
+        }
     }
 
     void InitGame()
@@ -71,7 +78,8 @@ public class GameManager : MonoBehaviour
         enemies.Add(script);
         //Find the position of all the enemies and put them in the array
         for(int i = 0; i < enemies.Count; i++){
-            objectPositions[(int)enemies[i].transform.position.x, (int)enemies[i].transform.position.y] = enemies[i].gameObject;
+            Enemy currentEnemy = enemies[i];
+            objectPositions[(int)currentEnemy.transform.position.x, (int)currentEnemy.transform.position.y] = currentEnemy.gameObject;
         }
         //Debug.Log(objectPositions);
     }
@@ -93,5 +101,26 @@ public class GameManager : MonoBehaviour
 
         playersTurn = true;
         enemiesMoving = false;
+    }
+
+    public void RebuildObjectPositions()
+    {
+        objectPositions = new GameObject[boardScript.columns, boardScript.rows];
+        //Find the player and put it in the objectPositions array
+        GameObject newPlayer = FindObjectOfType<Player>().gameObject;
+        objectPositions[(int)newPlayer.transform.position.x, (int)newPlayer.transform.position.y] = newPlayer.gameObject;
+        //Find all the walls
+        Wall[] walls = FindObjectsOfType<Wall>();
+        for (int i = 0; i < walls.Length; i++)
+        {
+            Wall currentWall = walls[i];
+            objectPositions[(int)currentWall.transform.position.x, (int)currentWall.transform.position.y] = currentWall.gameObject;
+        }
+
+        //Find the position of all the enemies and put them in the array
+        for(int i = 0; i < enemies.Count; i++){
+            Enemy currentEnemy = enemies[i];
+            objectPositions[(int)currentEnemy.transform.position.x, (int)currentEnemy.transform.position.y] = currentEnemy.gameObject;
+        }
     }
 }

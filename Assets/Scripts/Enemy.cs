@@ -35,10 +35,11 @@ public class Enemy : MovingObject
         }
 
         //Remove the current position of the enemy in objectPosistions
-        GameManager.instance.objectPositions[(int)transform.position.x, (int)transform.position.y] = null;
+        //GameManager.instance.objectPositions.SetValue(null, (int)transform.position.x, (int)transform.position.y);
         base.AttemptMove<T>(xDir, yDir);
         //Update the position of the enemy in objectPosistions
-        GameManager.instance.objectPositions[(int)transform.position.x, (int)transform.position.y] = this.gameObject;
+        //GameManager.instance.objectPositions[(int)transform.position.x, (int)transform.position.y] = this.gameObject;
+        GameManager.instance.RebuildObjectPositions();
         skipMove = true;
     }
 
