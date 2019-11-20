@@ -52,7 +52,7 @@ public class Enemy : MovingObject
 
         if (useMinimax)
         {
-            double[] minimaxResult = Minimax(CurrentState(), 3);
+            double[] minimaxResult = Minimax(CurrentState(), 1);
 
             xDir = (int)minimaxResult[1];
             yDir = (int)minimaxResult[2];
