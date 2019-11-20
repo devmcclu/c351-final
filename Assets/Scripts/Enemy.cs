@@ -55,6 +55,7 @@ public class Enemy : MovingObject
 
             xDir = (int)minimaxResult[1];
             yDir = (int)minimaxResult[2];
+            Debug.Log("MINIMAX RESULT: " + minimaxResult[0] + ", " + minimaxResult[1] + ", " + minimaxResult[2]);
         }
         else
         {
@@ -104,6 +105,7 @@ public class Enemy : MovingObject
         foreach (State child in children)
         {
             double[] minimaxResult = Minimax(child, depth - 1);
+            Debug.Log("Result: " + minimaxResult[0] + ", " + minimaxResult[1] + ", " + minimaxResult[2]);
             double value = minimaxResult[0];
 
             //Max if zombies' turn

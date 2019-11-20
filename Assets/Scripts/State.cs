@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -71,7 +72,7 @@ public class State
     //Returns the child state after the specified move is attempted
     public State GetChild(Vector2Int move)
     {
-        State child = new State(board, turn, skipTurn); //Clones the current state
+        State child = new State((GameObject[,])board.Clone(), turn, skipTurn); //Clones the current state
         child.makeMove(move);
         return child;
     }
@@ -104,6 +105,13 @@ public class State
         if (turn == -1)
         {
             Vector2Int newPosition = playerLoc + move;
+
+            //Out of bounds
+            if (newPosition.x < 0 || newPosition.y < 0 || newPosition.x >= board.GetLength(0) || newPosition.y >= board.GetLength(1))
+            {
+                return;
+            }
+
             //Move if empty
             if (board[newPosition[0], newPosition[1]] == null)
             {
@@ -113,6 +121,7 @@ public class State
             }
         }
 
+        lastMove = move;
         turn = -turn;
     }
 }
