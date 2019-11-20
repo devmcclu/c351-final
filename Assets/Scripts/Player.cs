@@ -44,12 +44,12 @@ public class Player : MovingObject
 
     protected override void AttemptMove<T>(int xDir, int yDir)
     {
-        //Remove the current position of the enemy in objectPosistions
-        GameManager.instance.objectPositions[(int)transform.position.x, (int)transform.position.y] = null;
+        //Remove the current position of the player in objectPosistions
+        //GameManager.instance.objectPositions.SetValue(null, (int)transform.position.x, (int)transform.position.y);
         base.AttemptMove<T>(xDir, yDir);
-        //Update the position of the enemy in objectPosistions
-        GameManager.instance.objectPositions[(int)transform.position.x, (int)transform.position.y] = this.gameObject;
-
+        //Update the position of the player in objectPosistions
+        //GameManager.instance.objectPositions[(int)transform.position.x, (int)transform.position.y] = this.gameObject;
+        GameManager.instance.RebuildObjectPositions();
         RaycastHit2D hit;
 
         GameManager.instance.playersTurn = false;
