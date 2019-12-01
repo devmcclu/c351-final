@@ -14,6 +14,8 @@ public class Enemy : MovingObject
     private bool skipMove;
     //Use minimax or not
     private bool useMinimax = true;
+    //Whether or not the zombies should skip every alternate turn
+    public static bool skipEveryOtherTurn = true;
 
     public int speed = 1;
 
@@ -28,7 +30,7 @@ public class Enemy : MovingObject
     protected override void AttemptMove<T>(int xDir, int yDir)
     {
         //Check if it is the enemy's turn
-        if(skipMove)
+        if(skipMove && skipEveryOtherTurn)
         {
             skipMove = false;
             return;
@@ -52,11 +54,11 @@ public class Enemy : MovingObject
 
         if (useMinimax)
         {
-            double[] minimaxResult = Minimax(CurrentState(), 1);
+            double[] minimaxResult = Minimax(CurrentState(), 7);
 
             xDir = (int)minimaxResult[1];
             yDir = (int)minimaxResult[2];
-            Debug.Log("MINIMAX RESULT: " + minimaxResult[0] + ", " + minimaxResult[1] + ", " + minimaxResult[2]);
+            //Debug.Log("MINIMAX RESULT: " + minimaxResult[0] + ", " + minimaxResult[1] + ", " + minimaxResult[2]);
         }
         else
         {
@@ -86,7 +88,7 @@ public class Enemy : MovingObject
     //Returns an array of 3 doubles. returnArray[0] = value, returnArray[1] = xDir of best move, returnArray[2] = yDir of best move.
     private double[] Minimax(State state, int depth)
     {
-        Debug.Log(state.playerLoc + ", " + state.enemyLoc + ", " + depth);
+        //Debug.Log("The current state is: " + state.playerLoc + ", " + state.enemyLoc + ", " + depth);
         double outcome = gameResult(state);
         if (outcome != 0.1)
         {
@@ -106,7 +108,7 @@ public class Enemy : MovingObject
         foreach (State child in children)
         {
             double[] minimaxResult = Minimax(child, depth - 1);
-            Debug.Log("Result: " + minimaxResult[0] + ", " + minimaxResult[1] + ", " + minimaxResult[2]);
+            //Debug.Log("Result: " + minimaxResult[0] + ", " + minimaxResult[1] + ", " + minimaxResult[2]);
             double value = minimaxResult[0];
 
             //Max if zombies' turn
@@ -128,6 +130,7 @@ public class Enemy : MovingObject
                     bestChild = child;
                 }
             }
+            //Debug.Log("The turn is " + state.turn + " and the best value is " + bestValue);
         }
 
         return new double[] {bestValue, bestChild.lastMove.x, bestChild.lastMove.y };

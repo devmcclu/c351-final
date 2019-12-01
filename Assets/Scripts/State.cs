@@ -83,37 +83,44 @@ public class State
         if (turn == 1)
         {
             Vector2Int newPosition = enemyLoc + move;
+            bool okay = true;
 
             //Out of bounds
             if (newPosition.x < 0 || newPosition.y < 0 || newPosition.x >= board.GetLength(0) || newPosition.y >= board.GetLength(1))
             {
-                return;
+                okay = false;
             }
 
-            //Move if empty and turn not skipped
-            if (board[newPosition[0], newPosition[1]] == null && !skipTurn)
+            //Move if empty and turn not skipped and not out of bounds
+            if (okay)
             {
-                board[newPosition[0], newPosition[1]] = board[enemyLoc[0], enemyLoc[1]];
-                board[enemyLoc[0], enemyLoc[1]] = null;
-                enemyLoc = newPosition;
+                if (board[newPosition[0], newPosition[1]] == null && !skipTurn)
+                {
+                    board[newPosition[0], newPosition[1]] = board[enemyLoc[0], enemyLoc[1]];
+                    board[enemyLoc[0], enemyLoc[1]] = null;
+                    enemyLoc = newPosition;
+                }
             }
 
-            skipTurn = !skipTurn;
+            if (Enemy.skipEveryOtherTurn) {
+                skipTurn = !skipTurn;
+            }
         }
 
         //If player's turn
         if (turn == -1)
         {
             Vector2Int newPosition = playerLoc + move;
+            bool okay = true;
 
             //Out of bounds
             if (newPosition.x < 0 || newPosition.y < 0 || newPosition.x >= board.GetLength(0) || newPosition.y >= board.GetLength(1))
             {
-                return;
+                okay = false;
             }
 
-            //Move if empty
-            if (board[newPosition[0], newPosition[1]] == null)
+            //Move if empty and not out of bounds
+            if (okay && board[newPosition[0], newPosition[1]] == null)
             {
                 board[newPosition[0], newPosition[1]] = board[playerLoc[0], playerLoc[1]];
                 board[playerLoc[0], playerLoc[1]] = null;

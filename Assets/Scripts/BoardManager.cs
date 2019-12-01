@@ -24,7 +24,7 @@ public class BoardManager : MonoBehaviour
     public int columns = 8;
     public int rows = 8;
     //Upper and lower limit of wallCount
-    public Count wallCount = new Count(5, 9);
+    public Count wallCount = new Count(20, 20); //Used to be (5, 9)
     //Arrays for different tile types (extendable in engine)
     public GameObject[] floorTiles;
     public GameObject[] wallTiles;
@@ -76,7 +76,7 @@ public class BoardManager : MonoBehaviour
         }
     }
 
-    //Fine a random position on the board to put an object
+    //Find a random position on the board to put an object
     Vector3 RandomPosition()
     {
         int randomIndex = Random.Range(0, gridPositions.Count);
