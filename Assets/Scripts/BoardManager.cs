@@ -31,6 +31,8 @@ public class BoardManager : MonoBehaviour
     public GameObject[] outerWallTiles;
     public GameObject[] enemyTiles;
 
+    public int enemyCount;
+
     //Board object
     private Transform boardHolder;
     //Vector3 list to keep hold of all the tiles and objects
@@ -106,7 +108,7 @@ public class BoardManager : MonoBehaviour
 
         //Test for object spawning
         LayoutObjectAtRandom(wallTiles, wallCount.minimum, wallCount.maximum);
-        int enemyCount = (int)Mathf.Log(level, 2f);
+        //int enemyCount = (int)Mathf.Log(level, 2f);
         LayoutObjectAtRandom(enemyTiles, enemyCount, enemyCount);
     }
 
