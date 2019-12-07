@@ -42,6 +42,19 @@ public class Player : MovingObject
         }
     }
 
+    public void OnTriggerEnter2D (Collider2D other)
+    {
+        //Check if the tag of the trigger collided with is Exit.
+        if(other.tag == "Exit")
+        {
+            //Invoke the Restart function to start the next level with a delay of restartLevelDelay
+            Invoke ("Restart", restartLevelDelay);
+
+            //Disable the player object since level is over.
+            enabled = false;
+        }
+    }
+
     protected override void AttemptMove<T>(int xDir, int yDir)
     {
         //Remove the current position of the player in objectPosistions

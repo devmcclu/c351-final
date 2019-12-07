@@ -49,6 +49,7 @@ MonoBehaviour:
   wallCount:
     minimum: 5
     maximum: 9
+  exit: {fileID: 8831117903073495996, guid: 051956ca4a5f59a49a9118ec0aaf26f7, type: 3}
   floorTiles:
   - {fileID: 6480202378286766367, guid: 4a3da7e53ecfff6499cfa3da062c73e7, type: 3}
   wallTiles:
