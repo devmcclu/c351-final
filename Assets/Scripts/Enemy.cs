@@ -197,7 +197,7 @@ public class Enemy : MovingObject
                         }
                     }
                 }
-                //Left of enemt
+                //Left of enemy
                 else
                 {
                     for(int i = (int)target.position.y; i < this.transform.position.y; i++)
