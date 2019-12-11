@@ -12,8 +12,9 @@ public class State
     public Vector2Int enemyLoc; //Enemy's location on the board
     public Vector2Int[] legalMoves = new Vector2Int[] { new Vector2Int(0, 1), new Vector2Int(0, -1), new Vector2Int(1, 0), new Vector2Int(-1, 0) };
     public Vector2Int lastMove;
+    public int healthLost; //How much health the player has lost
 
-    public State(GameObject[,] objectPositions, int t, bool skip)
+    public State(GameObject[,] objectPositions, int t, bool skip, int healthLost)
     {
         board = objectPositions;
         turn = t;
@@ -72,7 +73,7 @@ public class State
     //Returns the child state after the specified move is attempted
     public State GetChild(Vector2Int move)
     {
-        State child = new State((GameObject[,])board.Clone(), turn, skipTurn); //Clones the current state
+        State child = new State((GameObject[,])board.Clone(), turn, skipTurn, healthLost); //Clones the current state
         child.makeMove(move);
         return child;
     }
@@ -94,11 +95,17 @@ public class State
             //Move if empty and turn not skipped and not out of bounds
             if (okay)
             {
-                if (board[newPosition[0], newPosition[1]] == null && !skipTurn)
+                if (!skipTurn) 
                 {
-                    board[newPosition[0], newPosition[1]] = board[enemyLoc[0], enemyLoc[1]];
-                    board[enemyLoc[0], enemyLoc[1]] = null;
-                    enemyLoc = newPosition;
+                    if (board[newPosition[0], newPosition[1]] == null)
+                    {
+                        board[newPosition[0], newPosition[1]] = board[enemyLoc[0], enemyLoc[1]];
+                        board[enemyLoc[0], enemyLoc[1]] = null;
+                        enemyLoc = newPosition;
+                    } else if (board[newPosition[0], newPosition[1]].CompareTag("Player"))
+                    {
+                        healthLost += 10;
+                    }
                 }
             }
 

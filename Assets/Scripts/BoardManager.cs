@@ -25,6 +25,7 @@ public class BoardManager : MonoBehaviour
     public int rows = 8;
     //Upper and lower limit of wallCount
     public Count wallCount = new Count(20, 20); //Used to be (5, 9)
+    public GameObject exit;
     //Arrays for different tile types (extendable in engine)
     public GameObject[] floorTiles;
     public GameObject[] wallTiles;
@@ -110,6 +111,8 @@ public class BoardManager : MonoBehaviour
         LayoutObjectAtRandom(wallTiles, wallCount.minimum, wallCount.maximum);
         //int enemyCount = (int)Mathf.Log(level, 2f);
         LayoutObjectAtRandom(enemyTiles, enemyCount, enemyCount);
+        //Instantiate the exit tile in the upper right hand corner of our game board
+        Instantiate (exit, new Vector3 (columns - 1, rows - 1, 0f), Quaternion.identity);
     }
 
 }

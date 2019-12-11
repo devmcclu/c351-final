@@ -44,11 +44,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e6490608dd4ec94cb6f9ab63380ed01, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  columns: 8
-  rows: 8
+  columns: 12
+  rows: 12
   wallCount:
-    minimum: 5
-    maximum: 9
+    minimum: 35
+    maximum: 35
+  exit: {fileID: 8831117903073495996, guid: 051956ca4a5f59a49a9118ec0aaf26f7, type: 3}
   floorTiles:
   - {fileID: 6480202378286766367, guid: 4a3da7e53ecfff6499cfa3da062c73e7, type: 3}
   wallTiles:
@@ -57,7 +58,7 @@ MonoBehaviour:
   - {fileID: 8636129983639821184, guid: f9b0edcbd9ca31243a0e98e9d21da338, type: 3}
   enemyTiles:
   - {fileID: 7202498827529632316, guid: 19b6b1e80be24ed4aab2e1d5131bd12b, type: 3}
-  enemyCount: 4
+  enemyCount: 1
 --- !u!114 &7541248590413725220
 MonoBehaviour:
   m_ObjectHideFlags: 0

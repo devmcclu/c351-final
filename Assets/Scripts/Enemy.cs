@@ -19,6 +19,8 @@ public class Enemy : MovingObject
 
     public int speed = 1;
 
+    public int id; //The enemy's id number
+
     protected override void Start()
     {
         GameManager.instance.AddEnemyToList(this);
@@ -54,7 +56,7 @@ public class Enemy : MovingObject
 
         if (useMinimax)
         {
-            double[] minimaxResult = Minimax(CurrentState(), 7);
+            double[] minimaxResult = Minimax(CurrentState(), 5);
 
             xDir = (int)minimaxResult[1];
             yDir = (int)minimaxResult[2];
@@ -79,12 +81,14 @@ public class Enemy : MovingObject
     //Returns a new State object representing the current state of play. Assumes it is enemy's turn and not skipped.
     private State CurrentState()
     {
-        State s = new State(GameManager.instance.objectPositions, 1, false); ;
+        State s = new State(GameManager.instance.objectPositions, 1, false, 0);
         Debug.Log("State: " + s.playerLoc + ", " + s.enemyLoc + ", " + s.turn);
         s.PrintBoard();
         return s;
     }
 
+    //Uses alpha-beta pruning
+    //Currently only works with one zombie
     //Returns an array of 3 doubles. returnArray[0] = value, returnArray[1] = xDir of best move, returnArray[2] = yDir of best move.
     private double[] Minimax(State state, int depth)
     {
@@ -144,7 +148,7 @@ public class Enemy : MovingObject
 
     private double heuristic(State state)
     {
-        return basicHeuristic(state);
+        return taxicabHeuristic(state) + 10*state.healthLost;
     }
     private double basicHeuristic(State state)
     {
