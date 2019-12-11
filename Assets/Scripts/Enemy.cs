@@ -148,134 +148,125 @@ public class Enemy : MovingObject
 
     private double heuristic(State state)
     {
-        return taxicabHeuristic(state) + 10*state.healthLost;
+        return taxicabHeuristic(state);
     }
     private double basicHeuristic(State state)
     {
         double score = 0;
         //Fill in
         score += Mathf.Abs((this.transform.position.x - target.position.x) + (this.transform.position.y - target.position.y));
-        //Same x
-        if(target.position.x == this.transform.position.x)
-        {
-            //Above enemy
-            if(target.position.y > this.transform.position.y)
+        if ((transform.position.x < GameManager.instance.boardScript.columns) && (target.position.x < GameManager.instance.boardScript.columns) &&
+            (transform.position.y < GameManager.instance.boardScript.rows) && (target.position.y < GameManager.instance.boardScript.rows)){
+            //Same x
+            if(target.position.x == this.transform.position.x)
             {
-                for(int i = 0; i < GameManager.instance.boardScript.columns; i++)
+                //Above enemy
+                if(target.position.y > this.transform.position.y)
                 {
-                    for(int j = (int)this.transform.position.y; j < (int)target.position.y + 1; j++)
+                    for(int i = (int)this.transform.position.y; i < target.position.y; i++)
                     {
-                        if(GameManager.instance.objectPositions[i, j].CompareTag("Wall"))
+                        if (ChcekForWall((int)target.position.x, i)) 
+                        { 
+                            score += 2;
+                        }
+                    }      
+                }
+                //Below enemy
+                else
+                {
+                    for(int i = (int)target.position.y; i < this.transform.position.y; i++)
+                    {
+                        if (ChcekForWall((int)target.position.x, i))
                         {
                             score += 2;
                         }
                     }
                 }
             }
-            //Below enemy
-            else
-            {
-                for(int i = 0; i < GameManager.instance.boardScript.columns; i++)
+            //Same y
+            else if(target.position.y == this.transform.position.y){
+
+                //Right of enemy
+                if(target.position.x > this.transform.position.x)
                 {
-                    for(int j = (int)target.position.y; j < (int)this.transform.position.y + 1; j ++)
+                    for(int i = (int)this.transform.position.x; i < target.position.x; i++)
                     {
-                        if(GameManager.instance.objectPositions[i, j].CompareTag("Wall"))
-                        {
+                        if (ChcekForWall(i, (int)target.position.y))
+                        { 
                             score += 2;
                         }
                     }
                 }
+                //Left of enemt
+                else
+                {
+                    for(int i = (int)target.position.y; i < this.transform.position.y; i++)
+                    {
+                        if (ChcekForWall(i, (int)target.position.y)) score += 2;
+                    }
+                }
             }
-        }
-        //Same y
-        if(target.position.y == this.transform.position.y)
-        {
-            //Right of enemy
-            if(target.position.x > this.transform.position.x)
+            //Above and right of enemy
+            else if(target.position.x > this.transform.position.x && target.position.y > this.transform.position.y)
             {
                 for(int i = (int)this.transform.position.x; i < target.position.x + 1; i++)
                 {
-                    for(int j = 0; j < GameManager.instance.boardScript.rows; j ++)
+                    for(int j = (int)this.transform.position.y; j < target.position.y + 1; j++)
                     {
-                        if(GameManager.instance.objectPositions[i, j].CompareTag("Wall"))
+                        if (GameManager.instance.objectPositions[i, j] != null)
+                        {
+                            if (ChcekForWall(i, j) == true) 
+                            {
+                                score += 2;
+                            }
+                        }
+                    }
+                }
+            }
+            //Above and left of enenmy
+            else if(target.position.x > this.transform.position.x && target.position.y < this.transform.position.y)
+            {
+                for(int i = (int)this.transform.position.x; i < target.position.x + 1; i++)
+                {
+                    for(int j = (int)target.position.y; j < this.transform.position.y + 1; j ++)
+                    {
+                        if (ChcekForWall(i, j) == true) 
                         {
                             score += 2;
                         }
                     }
                 }
             }
-            //Left of enemy
-            else
+            //Below and right of enemy
+            else if(target.position.x < this.transform.position.x && target.position.y > this.transform.position.y)
             {
                 for(int i = (int)target.position.x; i < this.transform.position.x + 1; i++)
                 {
-                    for(int j = 0; j < GameManager.instance.boardScript.rows; j++)
+                    for(int j = (int)this.transform.position.y; j < target.position.y + 1; j ++)
                     {
-                        if(GameManager.instance.objectPositions[i, j].CompareTag("Wall"))
+                        if (ChcekForWall(i, j) == true) 
                         {
                             score += 2;
                         }
                     }
                 }
             }
-        }
-        //Above and right of enemy
-        if(target.position.x > this.transform.position.x && target.position.y > this.transform.position.y)
-        {
-            for(int i = (int)this.transform.position.x; i < target.position.x + 1; i++)
+            //Below and left of enemy
+            else if(target.position.x < this.transform.position.x && target.position.y < this.transform.position.y)
             {
-                for(int j = (int)this.transform.position.y; j < target.position.y + 1; j++)
+                for(int i = (int)target.position.x; i < this.transform.position.x + 1; i++)
                 {
-                    if(GameManager.instance.objectPositions[i, j].CompareTag("Wall"))
+                    for(int j = (int)target.position.y; j < this.transform.position.y + 1; j ++)
                     {
-                        score += 2;
+                        if (ChcekForWall(i, j) == true) 
+                        {
+                            score += 2;
+                        }
                     }
                 }
             }
+            //add the no wall
         }
-        //Above and left of enenmy
-        if(target.position.x > this.transform.position.x && target.position.y < this.transform.position.y)
-        {
-            for(int i = (int)this.transform.position.x; i < target.position.x + 1; i++)
-            {
-                for(int j = (int)target.position.y; j < this.transform.position.y + 1; j ++)
-                {
-                    if(GameManager.instance.objectPositions[i, j].CompareTag("Wall"))
-                    {
-                        score += 2;
-                    }
-                }
-            }
-        }
-        //Below and right of enemy
-        if(target.position.x < this.transform.position.x && target.position.y > this.transform.position.y)
-        {
-            for(int i = (int)target.position.x; i < this.transform.position.x + 1; i++)
-            {
-                for(int j = (int)this.transform.position.y; j < target.position.y + 1; j ++)
-                {
-                    if(GameManager.instance.objectPositions[i, j].CompareTag("Wall"))
-                    {
-                        score += 2;
-                    }
-                }
-            }
-        }
-        //Below and left of enemy
-        if(target.position.x < this.transform.position.x && target.position.y < this.transform.position.y)
-        {
-            for(int i = (int)target.position.x; i < this.transform.position.x + 1; i++)
-            {
-                for(int j = (int)target.position.y; j < this.transform.position.y + 1; j ++)
-                {
-                    if(GameManager.instance.objectPositions[i, j].CompareTag("Wall"))
-                    {
-                        score += 2;
-                    }
-                }
-            }
-        }
-
         return score;
     }
 
@@ -290,5 +281,17 @@ public class Enemy : MovingObject
         Player hitPlayer = component as Player;
 
         hitPlayer.HealthLoss(playerDamage);
+    }
+
+    private bool ChcekForWall(int x, int y)
+    {
+        if (GameManager.instance.objectPositions[x, y] != null)
+        {
+            if(GameManager.instance.objectPositions[x, y].CompareTag("Wall"))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }
