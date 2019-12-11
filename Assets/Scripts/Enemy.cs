@@ -154,113 +154,113 @@ public class Enemy : MovingObject
     {
         double score = 0;
         //Fill in
-        score += Mathf.Abs((this.transform.position.x - target.position.x) + (this.transform.position.y - target.position.y));
-        if ((transform.position.x < GameManager.instance.boardScript.columns) && (target.position.x < GameManager.instance.boardScript.columns) &&
-            (transform.position.y < GameManager.instance.boardScript.rows) && (target.position.y < GameManager.instance.boardScript.rows)){
+        score -= Mathf.Abs(state.enemyLoc.x - state.playerLoc.x) - Mathf.Abs(state.enemyLoc.y - state.playerLoc.y);
+        if ((state.enemyLoc.x < GameManager.instance.boardScript.columns) && (state.playerLoc.x < GameManager.instance.boardScript.columns) &&
+            (state.enemyLoc.y < GameManager.instance.boardScript.rows) && (state.playerLoc.y < GameManager.instance.boardScript.rows)){
             //Same x
-            if(target.position.x == this.transform.position.x)
+            if(state.playerLoc.x == state.enemyLoc.x)
             {
                 //Above enemy
-                if(target.position.y > this.transform.position.y)
+                if(state.playerLoc.y > state.enemyLoc.y)
                 {
-                    for(int i = (int)this.transform.position.y; i < target.position.y; i++)
+                    for(int i = state.enemyLoc.y; i < state.playerLoc.y; i++)
                     {
-                        if (ChcekForWall((int)target.position.x, i)) 
+                        if (ChcekForWall(state.playerLoc.x, i)) 
                         { 
-                            score += 2;
+                            score -= 2;
                         }
                     }      
                 }
                 //Below enemy
                 else
                 {
-                    for(int i = (int)target.position.y; i < this.transform.position.y; i++)
+                    for(int i = state.playerLoc.y; i < state.enemyLoc.y; i++)
                     {
-                        if (ChcekForWall((int)target.position.x, i))
+                        if (ChcekForWall(state.playerLoc.x, i))
                         {
-                            score += 2;
+                            score -= 2;
                         }
                     }
                 }
             }
             //Same y
-            else if(target.position.y == this.transform.position.y){
+            else if(state.playerLoc.y == state.enemyLoc.y){
 
                 //Right of enemy
-                if(target.position.x > this.transform.position.x)
+                if(state.playerLoc.x > state.enemyLoc.x)
                 {
-                    for(int i = (int)this.transform.position.x; i < target.position.x; i++)
+                    for(int i = state.enemyLoc.x; i < state.playerLoc.x; i++)
                     {
-                        if (ChcekForWall(i, (int)target.position.y))
+                        if (ChcekForWall(i, state.playerLoc.y))
                         { 
-                            score += 2;
+                            score -= 2;
                         }
                     }
                 }
                 //Left of enemt
                 else
                 {
-                    for(int i = (int)target.position.y; i < this.transform.position.y; i++)
+                    for(int i = state.playerLoc.y; i < state.enemyLoc.y; i++)
                     {
-                        if (ChcekForWall(i, (int)target.position.y)) score += 2;
+                        if (ChcekForWall(i, state.playerLoc.y)) score -= 2;
                     }
                 }
             }
             //Above and right of enemy
-            else if(target.position.x > this.transform.position.x && target.position.y > this.transform.position.y)
+            else if(state.playerLoc.x > state.enemyLoc.x && state.playerLoc.y > state.enemyLoc.y)
             {
-                for(int i = (int)this.transform.position.x; i < target.position.x + 1; i++)
+                for(int i = state.enemyLoc.x; i < state.playerLoc.x + 1; i++)
                 {
-                    for(int j = (int)this.transform.position.y; j < target.position.y + 1; j++)
+                    for(int j = state.enemyLoc.y; j < state.playerLoc.y + 1; j++)
                     {
                         if (GameManager.instance.objectPositions[i, j] != null)
                         {
                             if (ChcekForWall(i, j) == true) 
                             {
-                                score += 2;
+                                score -= 2;
                             }
                         }
                     }
                 }
             }
             //Above and left of enenmy
-            else if(target.position.x > this.transform.position.x && target.position.y < this.transform.position.y)
+            else if(target.position.x > state.enemyLoc.x && state.playerLoc.y < state.enemyLoc.y)
             {
-                for(int i = (int)this.transform.position.x; i < target.position.x + 1; i++)
+                for(int i = state.enemyLoc.x; i < state.playerLoc.x + 1; i++)
                 {
-                    for(int j = (int)target.position.y; j < this.transform.position.y + 1; j ++)
+                    for(int j = state.playerLoc.y; j < state.enemyLoc.y + 1; j ++)
                     {
                         if (ChcekForWall(i, j) == true) 
                         {
-                            score += 2;
+                            score -= 2;
                         }
                     }
                 }
             }
             //Below and right of enemy
-            else if(target.position.x < this.transform.position.x && target.position.y > this.transform.position.y)
+            else if(state.playerLoc.x < state.enemyLoc.x && state.playerLoc.y > state.enemyLoc.y)
             {
-                for(int i = (int)target.position.x; i < this.transform.position.x + 1; i++)
+                for(int i = state.playerLoc.x; i < state.enemyLoc.x + 1; i++)
                 {
-                    for(int j = (int)this.transform.position.y; j < target.position.y + 1; j ++)
+                    for(int j = state.enemyLoc.y; j < state.playerLoc.y + 1; j ++)
                     {
                         if (ChcekForWall(i, j) == true) 
                         {
-                            score += 2;
+                            score -= 2;
                         }
                     }
                 }
             }
             //Below and left of enemy
-            else if(target.position.x < this.transform.position.x && target.position.y < this.transform.position.y)
+            else if(state.playerLoc.x < state.enemyLoc.x && state.playerLoc.y < state.enemyLoc.y)
             {
-                for(int i = (int)target.position.x; i < this.transform.position.x + 1; i++)
+                for(int i = state.playerLoc.x; i < state.enemyLoc.x + 1; i++)
                 {
-                    for(int j = (int)target.position.y; j < this.transform.position.y + 1; j ++)
+                    for(int j = state.playerLoc.y; j < state.enemyLoc.y + 1; j ++)
                     {
                         if (ChcekForWall(i, j) == true) 
                         {
-                            score += 2;
+                            score -= 2;
                         }
                     }
                 }
