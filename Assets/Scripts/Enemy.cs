@@ -148,7 +148,7 @@ public class Enemy : MovingObject
 
     private double heuristic(State state)
     {
-        return taxicabHeuristic(state);
+        return taxicabHeuristic(state) + 10*state.healthLost;
     }
     private double basicHeuristic(State state)
     {
