@@ -148,7 +148,8 @@ public class Enemy : MovingObject
 
     private double heuristic(State state)
     {
-        return taxicabHeuristic(state) + 10*state.healthLost;
+        //return taxicabHeuristic(state) + 10*state.healthLost;
+        return basicHeuristic(state);
     }
     private double basicHeuristic(State state)
     {
@@ -167,7 +168,7 @@ public class Enemy : MovingObject
                     {
                         if (ChcekForWall(state.playerLoc.x, i)) 
                         { 
-                            score -= 2;
+                            score -= .2;
                         }
                     }      
                 }
@@ -178,7 +179,7 @@ public class Enemy : MovingObject
                     {
                         if (ChcekForWall(state.playerLoc.x, i))
                         {
-                            score -= 2;
+                            score -= .2;
                         }
                     }
                 }
@@ -193,7 +194,7 @@ public class Enemy : MovingObject
                     {
                         if (ChcekForWall(i, state.playerLoc.y))
                         { 
-                            score -= 2;
+                            score -= .2;
                         }
                     }
                 }
@@ -202,7 +203,7 @@ public class Enemy : MovingObject
                 {
                     for(int i = state.playerLoc.y; i < state.enemyLoc.y; i++)
                     {
-                        if (ChcekForWall(i, state.playerLoc.y)) score -= 2;
+                        if (ChcekForWall(i, state.playerLoc.y)) score -= .2;
                     }
                 }
             }
@@ -217,7 +218,7 @@ public class Enemy : MovingObject
                         {
                             if (ChcekForWall(i, j) == true) 
                             {
-                                score -= 2;
+                                score -= .2;
                             }
                         }
                     }
@@ -232,7 +233,7 @@ public class Enemy : MovingObject
                     {
                         if (ChcekForWall(i, j) == true) 
                         {
-                            score -= 2;
+                            score -= .2;
                         }
                     }
                 }
@@ -246,7 +247,7 @@ public class Enemy : MovingObject
                     {
                         if (ChcekForWall(i, j) == true) 
                         {
-                            score -= 2;
+                            score -= .2;
                         }
                     }
                 }
@@ -260,7 +261,7 @@ public class Enemy : MovingObject
                     {
                         if (ChcekForWall(i, j) == true) 
                         {
-                            score -= 2;
+                            score -= .2;
                         }
                     }
                 }
