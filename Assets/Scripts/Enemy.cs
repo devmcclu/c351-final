@@ -40,7 +40,24 @@ public class Enemy : MovingObject
 
         //Remove the current position of the enemy in objectPosistions
         //GameManager.instance.objectPositions.SetValue(null, (int)transform.position.x, (int)transform.position.y);
-        base.AttemptMove<MovingObject>(xDir, yDir);
+
+        //Check to make sure there is nothing blocking
+        GameManager.instance.RebuildObjectPositions();
+        GameObject[,] objPos = GameManager.instance.objectPositions;
+        int newX = (int)transform.position.x + xDir;
+        int newY = (int)transform.position.y + yDir;
+        if (newX < 0 || newX >= objPos.GetLength(0) || newY < 0 || newY >= objPos.GetLength(1))
+        {
+            return;
+        }
+        if(objPos[newX, newY] == null)
+        {
+            base.AttemptMove<MovingObject>(xDir, yDir);
+        } else if(objPos[newX, newY].CompareTag("Player"))
+        {
+            base.AttemptMove<MovingObject>(xDir, yDir);
+        }
+
         //Update the position of the enemy in objectPosistions
         //GameManager.instance.objectPositions[(int)transform.position.x, (int)transform.position.y] = this.gameObject;
         GameManager.instance.RebuildObjectPositions();
@@ -176,8 +193,23 @@ public class Enemy : MovingObject
     private double heuristic(State state)
     {
         return taxicabHeuristic(state) + 10*state.healthLost;
+        //return modifiedTaxicabHeuristic(state) + 10*state.healthLost - spreadHeuristic(state)/10;
         //return basicHeuristic(state) + 10*state.healthLost;
     }
+
+    private double spreadHeuristic(State state)
+    {
+        double value = 0;
+        foreach (Vector2Int position in state.enemyLocs)
+        {
+            foreach (Vector2Int otherPosition in state.enemyLocs)
+            {
+                value += Mathf.Abs(position.x - otherPosition.x) + Mathf.Abs(position.y - otherPosition.y);
+            }
+        }
+        return value;
+    }
+
     private double basicHeuristic(State state)
     {
         double score = 0;
@@ -313,7 +345,17 @@ public class Enemy : MovingObject
         double dist = 0;
         foreach (Vector2Int enemyLoc in s.enemyLocs)
         {
-            dist += Mathf.Abs(enemyLoc.x - s.playerLoc.x) + Mathf.Abs(enemyLoc.y - s.playerLoc.y);
+            dist += Math.Sqrt(Mathf.Abs(enemyLoc.x - s.playerLoc.x) + Mathf.Abs(enemyLoc.y - s.playerLoc.y));
+        }
+        return -dist;
+    }
+
+    private double modifiedTaxicabHeuristic(State s)
+    {
+        double dist = 0;
+        foreach (Vector2Int enemyLoc in s.enemyLocs)
+        {
+            dist += Math.Sqrt(Mathf.Abs(enemyLoc.x - s.playerLoc.x) + Mathf.Abs(enemyLoc.y - s.playerLoc.y));
         }
         return -dist;
     }
