@@ -8,13 +8,15 @@ public class Player : MovingObject
 {
     public float restartLevelDelay = 1f;
     public int health;
-
+    public int score;
     public Text healthText;
+    public Text scoreText;
 
     // Start is called before the first frame update
     protected override void Start()
     {
         health = GameManager.instance.playerHealth;
+        scoreText.text = "Score: 0";
         base.Start();
         UpdateHealth();
     }
@@ -52,6 +54,12 @@ public class Player : MovingObject
 
             //Disable the player object since level is over.
             enabled = false;
+        }
+        else if(other.tag == "Item")
+        {
+            Destroy(other.gameObject);
+            score += 5;
+            scoreText.text = "Score: " + score.ToString();
         }
     }
 
