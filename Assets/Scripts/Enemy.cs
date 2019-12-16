@@ -154,8 +154,7 @@ public class Enemy : MovingObject
     private double basicHeuristic(State state)
     {
         double score = 0;
-        //Fill in
-        score -= Mathf.Abs(state.enemyLoc.x - state.playerLoc.x) - Mathf.Abs(state.enemyLoc.y - state.playerLoc.y);
+        score -= Mathf.Sqrt(Mathf.Abs(state.enemyLoc.x - state.playerLoc.x) + Mathf.Abs(state.enemyLoc.y - state.playerLoc.y));
         if ((state.enemyLoc.x < GameManager.instance.boardScript.columns) && (state.playerLoc.x < GameManager.instance.boardScript.columns) &&
             (state.enemyLoc.y < GameManager.instance.boardScript.rows) && (state.playerLoc.y < GameManager.instance.boardScript.rows)){
             //Same x
