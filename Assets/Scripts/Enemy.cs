@@ -154,7 +154,11 @@ public class Enemy : MovingObject
     private double basicHeuristic(State state)
     {
         double score = 0;
-        score -= Mathf.Sqrt(Mathf.Abs(state.enemyLoc.x - state.playerLoc.x) + Mathf.Abs(state.enemyLoc.y - state.playerLoc.y));
+        double weight = 0;
+        score -= Mathf.Sqrt(Mathf.Abs( state.enemyLoc.x - state.playerLoc.x ) + Mathf.Abs( state.enemyLoc.y - state.playerLoc.y ));
+        //score -= Mathf.Abs(state.enemyLoc.x - state.playerLoc.x) - Mathf.Abs(state.enemyLoc.y - state.playerLoc.y);
+        weight = Mathf.Sqrt(Mathf.Pow(( state.enemyLoc.x - state.playerLoc.x ),2) + (Mathf.Pow(( state.enemyLoc.y - state.playerLoc.y ),2))) *0.1;
+        
         if ((state.enemyLoc.x < GameManager.instance.boardScript.columns) && (state.playerLoc.x < GameManager.instance.boardScript.columns) &&
             (state.enemyLoc.y < GameManager.instance.boardScript.rows) && (state.playerLoc.y < GameManager.instance.boardScript.rows)){
             //Same x
@@ -167,7 +171,8 @@ public class Enemy : MovingObject
                     {
                         if (ChcekForWall(state.playerLoc.x, i)) 
                         { 
-                            score -= .2;
+                            //score -= 0.2;
+                            score -= weight;
                         }
                     }      
                 }
@@ -178,7 +183,8 @@ public class Enemy : MovingObject
                     {
                         if (ChcekForWall(state.playerLoc.x, i))
                         {
-                            score -= .2;
+                            //score -= 0.2;
+                            score -= weight;
                         }
                     }
                 }
@@ -193,7 +199,8 @@ public class Enemy : MovingObject
                     {
                         if (ChcekForWall(i, state.playerLoc.y))
                         { 
-                            score -= .2;
+                            //score -= 0.2;
+                            score -= weight;
                         }
                     }
                 }
@@ -202,7 +209,7 @@ public class Enemy : MovingObject
                 {
                     for(int i = state.playerLoc.y; i < state.enemyLoc.y; i++)
                     {
-                        if (ChcekForWall(i, state.playerLoc.y)) score -= .2;
+                        if (ChcekForWall(i, state.playerLoc.y)) score -= weight;
                     }
                 }
             }
@@ -217,7 +224,8 @@ public class Enemy : MovingObject
                         {
                             if (ChcekForWall(i, j) == true) 
                             {
-                                score -= .2;
+                                //score -= 0.2;
+                                score -= weight;
                             }
                         }
                     }
@@ -232,7 +240,8 @@ public class Enemy : MovingObject
                     {
                         if (ChcekForWall(i, j) == true) 
                         {
-                            score -= .2;
+                            //score -= 0.2;
+                            score -= weight;
                         }
                     }
                 }
@@ -246,7 +255,8 @@ public class Enemy : MovingObject
                     {
                         if (ChcekForWall(i, j) == true) 
                         {
-                            score -= .2;
+                            //score -= 0.2;
+                            score -= weight;
                         }
                     }
                 }
@@ -260,15 +270,17 @@ public class Enemy : MovingObject
                     {
                         if (ChcekForWall(i, j) == true) 
                         {
-                            score -= .2;
+                            //score -= 0.2;
+                            score -= weight;
                         }
                     }
                 }
             }
-            //add the no wall
         }
         return score;
     }
+
+
 
     //Just negative the taxicab distance between player and enemy
     private double taxicabHeuristic(State s)
@@ -276,6 +288,7 @@ public class Enemy : MovingObject
         return -Mathf.Abs(s.enemyLoc.x - s.playerLoc.x) - Mathf.Abs(s.enemyLoc.y - s.playerLoc.y);
     }
     
+
     protected override void OnCantMove<T>(T component)
     {
         Player hitPlayer = component as Player;
