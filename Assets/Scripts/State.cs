@@ -14,8 +14,9 @@ public class State
     public Vector2Int lastMove;
     public int healthLost; //How much health the player has lost
 
-    public State(GameObject[,] objectPositions, int t, bool skip, int healthLost)
+    public State(GameObject[,] objectPositions, int t, bool skip, int healthL)
     {
+        healthLost = healthL;
         board = objectPositions;
         turn = t;
         skipTurn = skip;
