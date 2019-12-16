@@ -63,7 +63,7 @@ public class Player : MovingObject
         //Update the position of the player in objectPosistions
         //GameManager.instance.objectPositions[(int)transform.position.x, (int)transform.position.y] = this.gameObject;
         GameManager.instance.RebuildObjectPositions();
-        RaycastHit2D hit;
+        //RaycastHit2D hit;
 
         GameManager.instance.playersTurn = false;
     }

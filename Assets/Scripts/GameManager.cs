@@ -93,9 +93,18 @@ public class GameManager : MonoBehaviour
             yield return new WaitForSeconds(turnDelay);
         }
 
+        RebuildObjectPositions();
+
         for(int i = 0; i < enemies.Count; i++)
         {
-            enemies[i].MoveEnemy();
+            //enemies[i].MoveEnemy();
+
+            //Only the first zombie needs to run minimax. It will tell all the others what move to make.
+            if (i == 0)
+            {
+                enemies[0].MoveEnemy(); 
+            }
+
             yield return new WaitForSeconds(enemies[i].moveTime);
         }
 

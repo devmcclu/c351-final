@@ -15,7 +15,7 @@ public class Enemy : MovingObject
     //Use minimax or not
     private bool useMinimax = true;
     //Whether or not the zombies should skip every alternate turn
-    public static bool skipEveryOtherTurn = true;
+    public static bool skipEveryOtherTurn = false;
 
     public int speed = 1;
 
@@ -40,7 +40,7 @@ public class Enemy : MovingObject
 
         //Remove the current position of the enemy in objectPosistions
         //GameManager.instance.objectPositions.SetValue(null, (int)transform.position.x, (int)transform.position.y);
-        base.AttemptMove<T>(xDir, yDir);
+        base.AttemptMove<MovingObject>(xDir, yDir);
         //Update the position of the enemy in objectPosistions
         //GameManager.instance.objectPositions[(int)transform.position.x, (int)transform.position.y] = this.gameObject;
         GameManager.instance.RebuildObjectPositions();
@@ -56,11 +56,22 @@ public class Enemy : MovingObject
 
         if (useMinimax)
         {
-            double[] minimaxResult = Minimax(CurrentState(), 5, -100000000, 100000000);
+            object[] minimaxResult = Minimax(CurrentState(), 3, -100000000, 100000000);
 
-            xDir = (int)minimaxResult[1];
-            yDir = (int)minimaxResult[2];
-            Debug.Log("MINIMAX RESULT: " + minimaxResult[0] + ", " + minimaxResult[1] + ", " + minimaxResult[2]);
+            List<Vector2Int> bestMoves = (List<Vector2Int>)minimaxResult[1];
+
+            Vector2Int move0 = bestMoves[0];
+
+            xDir = move0.x;
+            yDir = move0.y;
+
+            for (int i = 1; i < State.zombies.Count; i++)
+            {
+                Vector2Int thisMove = bestMoves[i];
+                State.zombies[i].GetComponent<Enemy>().AttemptMove<MovingObject>(thisMove.x, thisMove.y);
+            }
+
+            //Debug.Log("MINIMAX RESULT: " + (double)minimaxResult[0] + ", " + ((List<Vector2Int>)minimaxResult[1])[0]);
         }
         else
         {
@@ -81,39 +92,39 @@ public class Enemy : MovingObject
     //Returns a new State object representing the current state of play. Assumes it is enemy's turn and not skipped.
     private State CurrentState()
     {
-        State s = new State(GameManager.instance.objectPositions, 1, false, 0);
-        Debug.Log("State: " + s.playerLoc + ", " + s.enemyLoc + ", " + s.turn);
+        State s = new State(GameManager.instance.objectPositions, 1, false, 0, this.gameObject, true, null, new Vector2Int());
+        //Debug.Log("State: " + s.playerLoc + ", " + s.enemyLocs[0]+ ", " + s.turn);
         s.PrintBoard();
         return s;
     }
 
-    //Uses alpha-beta pruning
-    //Currently only works with one zombie
-    //Returns an array of 3 doubles. returnArray[0] = value, returnArray[1] = xDir of best move, returnArray[2] = yDir of best move.
-    private double[] Minimax(State state, int depth, double alpha, double beta)
+    //Uses alpha-beta pruning for efficiency
+    //Works with multiple zombies!
+    //Returns an array of 2 objects. returnArray[0] = value (which is a double), and returnArray[1] = bestMove (which is a List<Vector2Int>)
+    private object[] Minimax(State state, int depth, double alpha, double beta)
     {
-        Debug.Log("The current state is: " + state.playerLoc + ", " + state.enemyLoc + ", " + depth);
+        //Debug.Log("The current state is: " + state.playerLoc + ", " + state.enemyLocs[0]+ ", " + depth);
         double outcome = gameResult(state);
         if (outcome != 0.1)
         {
-            return new double[] { outcome*10000, 0, 0 };
+            return new object[] { outcome * 10000, new List<Vector2Int> { new Vector2Int(0, 0) } };
         }
 
         if (depth == 0) 
         {
-            return new double[]{ heuristic(state), 0, 0 };
+            return new object[] {heuristic(state), new List<Vector2Int> { new Vector2Int(0, 0) } };
         }
 
-        State[] children = state.GetChildren();
+        List<State> children = state.GetChildren();
 
         double bestValue = -1000000 * state.turn;
         State bestChild = null;
 
         foreach (State child in children)
         {
-            double[] minimaxResult = Minimax(child, depth - 1, alpha, beta);
-            Debug.Log("Result: " + minimaxResult[0] + ", " + minimaxResult[1] + ", " + minimaxResult[2]);
-            double value = minimaxResult[0];
+            object[] minimaxResult = Minimax(child, depth - 1, alpha, beta);
+            //Debug.Log("MINIMAX RESULT: " + (double)minimaxResult[0] + ", " + ((List<Vector2Int>)minimaxResult[1])[0]);
+            double value = (double)minimaxResult[0];
 
             //Max if zombies' turn
             if (state.turn == 1)
@@ -150,10 +161,10 @@ public class Enemy : MovingObject
                     break;
                 }
             }
-            Debug.Log("The turn is " + state.turn + " and the best value is " + bestValue);
+            //Debug.Log("The turn is " + state.turn + " and the best value is " + bestValue);
         }
 
-        return new double[] {bestValue, bestChild.lastMove.x, bestChild.lastMove.y };
+        return new object[] {bestValue, bestChild.lastMove};
     }
 
     //Needs to be written. Specification: -1 = player win, 0 = tie, 1 = zombie win, 0.1 = no result yet
@@ -165,118 +176,119 @@ public class Enemy : MovingObject
     private double heuristic(State state)
     {
         return taxicabHeuristic(state) + 10*state.healthLost;
+        //return basicHeuristic(state) + 10*state.healthLost;
     }
     private double basicHeuristic(State state)
     {
         double score = 0;
         //Fill in
-        score -= Mathf.Abs(state.enemyLoc.x - state.playerLoc.x) - Mathf.Abs(state.enemyLoc.y - state.playerLoc.y);
-        if ((state.enemyLoc.x < GameManager.instance.boardScript.columns) && (state.playerLoc.x < GameManager.instance.boardScript.columns) &&
-            (state.enemyLoc.y < GameManager.instance.boardScript.rows) && (state.playerLoc.y < GameManager.instance.boardScript.rows)){
+        score -= Mathf.Abs(state.enemyLocs[0].x - state.playerLoc.x) - Mathf.Abs(state.enemyLocs[0].y - state.playerLoc.y);
+        if ((state.enemyLocs[0].x < GameManager.instance.boardScript.columns) && (state.playerLoc.x < GameManager.instance.boardScript.columns) &&
+            (state.enemyLocs[0].y < GameManager.instance.boardScript.rows) && (state.playerLoc.y < GameManager.instance.boardScript.rows)){
             //Same x
-            if(state.playerLoc.x == state.enemyLoc.x)
+            if(state.playerLoc.x == state.enemyLocs[0].x)
             {
                 //Above enemy
-                if(state.playerLoc.y > state.enemyLoc.y)
+                if(state.playerLoc.y > state.enemyLocs[0].y)
                 {
-                    for(int i = state.enemyLoc.y; i < state.playerLoc.y; i++)
+                    for(int i = state.enemyLocs[0].y; i < state.playerLoc.y; i++)
                     {
                         if (ChcekForWall(state.playerLoc.x, i)) 
                         { 
-                            score -= 2;
+                            score -= .2;
                         }
                     }      
                 }
                 //Below enemy
                 else
                 {
-                    for(int i = state.playerLoc.y; i < state.enemyLoc.y; i++)
+                    for(int i = state.playerLoc.y; i < state.enemyLocs[0].y; i++)
                     {
                         if (ChcekForWall(state.playerLoc.x, i))
                         {
-                            score -= 2;
+                            score -= .2;
                         }
                     }
                 }
             }
             //Same y
-            else if(state.playerLoc.y == state.enemyLoc.y){
+            else if(state.playerLoc.y == state.enemyLocs[0].y){
 
                 //Right of enemy
-                if(state.playerLoc.x > state.enemyLoc.x)
+                if(state.playerLoc.x > state.enemyLocs[0].x)
                 {
-                    for(int i = state.enemyLoc.x; i < state.playerLoc.x; i++)
+                    for(int i = state.enemyLocs[0].x; i < state.playerLoc.x; i++)
                     {
                         if (ChcekForWall(i, state.playerLoc.y))
                         { 
-                            score -= 2;
+                            score -= .2;
                         }
                     }
                 }
                 //Left of enemy
                 else
                 {
-                    for(int i = state.playerLoc.y; i < state.enemyLoc.y; i++)
+                    for(int i = state.playerLoc.y; i < state.enemyLocs[0].y; i++)
                     {
-                        if (ChcekForWall(i, state.playerLoc.y)) score -= 2;
+                        if (ChcekForWall(i, state.playerLoc.y)) score -= .2;
                     }
                 }
             }
             //Above and right of enemy
-            else if(state.playerLoc.x > state.enemyLoc.x && state.playerLoc.y > state.enemyLoc.y)
+            else if(state.playerLoc.x > state.enemyLocs[0].x && state.playerLoc.y > state.enemyLocs[0].y)
             {
-                for(int i = state.enemyLoc.x; i < state.playerLoc.x + 1; i++)
+                for(int i = state.enemyLocs[0].x; i < state.playerLoc.x + 1; i++)
                 {
-                    for(int j = state.enemyLoc.y; j < state.playerLoc.y + 1; j++)
+                    for(int j = state.enemyLocs[0].y; j < state.playerLoc.y + 1; j++)
                     {
                         if (GameManager.instance.objectPositions[i, j] != null)
                         {
                             if (ChcekForWall(i, j) == true) 
                             {
-                                score -= 2;
+                                score -= .2;
                             }
                         }
                     }
                 }
             }
             //Above and left of enenmy
-            else if(target.position.x > state.enemyLoc.x && state.playerLoc.y < state.enemyLoc.y)
+            else if(target.position.x > state.enemyLocs[0].x && state.playerLoc.y < state.enemyLocs[0].y)
             {
-                for(int i = state.enemyLoc.x; i < state.playerLoc.x + 1; i++)
+                for(int i = state.enemyLocs[0].x; i < state.playerLoc.x + 1; i++)
                 {
-                    for(int j = state.playerLoc.y; j < state.enemyLoc.y + 1; j ++)
+                    for(int j = state.playerLoc.y; j < state.enemyLocs[0].y + 1; j ++)
                     {
                         if (ChcekForWall(i, j) == true) 
                         {
-                            score -= 2;
+                            score -= .2;
                         }
                     }
                 }
             }
             //Below and right of enemy
-            else if(state.playerLoc.x < state.enemyLoc.x && state.playerLoc.y > state.enemyLoc.y)
+            else if(state.playerLoc.x < state.enemyLocs[0].x && state.playerLoc.y > state.enemyLocs[0].y)
             {
-                for(int i = state.playerLoc.x; i < state.enemyLoc.x + 1; i++)
+                for(int i = state.playerLoc.x; i < state.enemyLocs[0].x + 1; i++)
                 {
-                    for(int j = state.enemyLoc.y; j < state.playerLoc.y + 1; j ++)
+                    for(int j = state.enemyLocs[0].y; j < state.playerLoc.y + 1; j ++)
                     {
                         if (ChcekForWall(i, j) == true) 
                         {
-                            score -= 2;
+                            score -= .2;
                         }
                     }
                 }
             }
             //Below and left of enemy
-            else if(state.playerLoc.x < state.enemyLoc.x && state.playerLoc.y < state.enemyLoc.y)
+            else if(state.playerLoc.x < state.enemyLocs[0].x && state.playerLoc.y < state.enemyLocs[0].y)
             {
-                for(int i = state.playerLoc.x; i < state.enemyLoc.x + 1; i++)
+                for(int i = state.playerLoc.x; i < state.enemyLocs[0].x + 1; i++)
                 {
-                    for(int j = state.playerLoc.y; j < state.enemyLoc.y + 1; j ++)
+                    for(int j = state.playerLoc.y; j < state.enemyLocs[0].y + 1; j ++)
                     {
                         if (ChcekForWall(i, j) == true) 
                         {
-                            score -= 2;
+                            score -= .2;
                         }
                     }
                 }
@@ -286,17 +298,23 @@ public class Enemy : MovingObject
         return score;
     }
 
-    //Just negative the taxicab distance between player and enemy
+    //Just negative the sum of taxicab distance between player and enemies
     private double taxicabHeuristic(State s)
     {
-        return -Mathf.Abs(s.enemyLoc.x - s.playerLoc.x) - Mathf.Abs(s.enemyLoc.y - s.playerLoc.y);
+        double dist = 0;
+        foreach (Vector2Int enemyLoc in s.enemyLocs)
+        {
+            dist += Mathf.Abs(enemyLoc.x - s.playerLoc.x) + Mathf.Abs(enemyLoc.y - s.playerLoc.y);
+        }
+        return -dist;
     }
-    
+
     protected override void OnCantMove<T>(T component)
     {
-        Player hitPlayer = component as Player;
-
-        hitPlayer.HealthLoss(playerDamage);
+        if (component.CompareTag("Player")) {
+            Player hitPlayer = component as Player;
+            hitPlayer.HealthLoss(playerDamage);
+        }
     }
 
     private bool ChcekForWall(int x, int y)
