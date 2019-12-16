@@ -181,10 +181,13 @@ public class Enemy : MovingObject
     private double basicHeuristic(State state)
     {
         double score = 0;
-        //Fill in
-        score -= Mathf.Abs(state.enemyLocs[0].x - state.playerLoc.x) - Mathf.Abs(state.enemyLocs[0].y - state.playerLoc.y);
-        if ((state.enemyLocs[0].x < GameManager.instance.boardScript.columns) && (state.playerLoc.x < GameManager.instance.boardScript.columns) &&
-            (state.enemyLocs[0].y < GameManager.instance.boardScript.rows) && (state.playerLoc.y < GameManager.instance.boardScript.rows)){
+        double weight = 0;
+        score -= Mathf.Sqrt(Mathf.Abs( state.enemyLoc.x - state.playerLoc.x ) + Mathf.Abs( state.enemyLoc.y - state.playerLoc.y ));
+        //score -= Mathf.Abs(state.enemyLoc.x - state.playerLoc.x) - Mathf.Abs(state.enemyLoc.y - state.playerLoc.y);
+        weight = Mathf.Sqrt(Mathf.Pow(( state.enemyLoc.x - state.playerLoc.x ),2) + (Mathf.Pow(( state.enemyLoc.y - state.playerLoc.y ),2))) *0.1;
+        
+        if ((state.enemyLoc.x < GameManager.instance.boardScript.columns) && (state.playerLoc.x < GameManager.instance.boardScript.columns) &&
+            (state.enemyLoc.y < GameManager.instance.boardScript.rows) && (state.playerLoc.y < GameManager.instance.boardScript.rows)){
             //Same x
             if(state.playerLoc.x == state.enemyLocs[0].x)
             {
@@ -195,7 +198,8 @@ public class Enemy : MovingObject
                     {
                         if (ChcekForWall(state.playerLoc.x, i)) 
                         { 
-                            score -= .2;
+                            //score -= 0.2;
+                            score -= weight;
                         }
                     }      
                 }
@@ -206,7 +210,8 @@ public class Enemy : MovingObject
                     {
                         if (ChcekForWall(state.playerLoc.x, i))
                         {
-                            score -= .2;
+                            //score -= 0.2;
+                            score -= weight;
                         }
                     }
                 }
@@ -221,7 +226,8 @@ public class Enemy : MovingObject
                     {
                         if (ChcekForWall(i, state.playerLoc.y))
                         { 
-                            score -= .2;
+                            //score -= 0.2;
+                            score -= weight;
                         }
                     }
                 }
@@ -230,7 +236,7 @@ public class Enemy : MovingObject
                 {
                     for(int i = state.playerLoc.y; i < state.enemyLocs[0].y; i++)
                     {
-                        if (ChcekForWall(i, state.playerLoc.y)) score -= .2;
+                        if (ChcekForWall(i, state.playerLoc.y)) score -= weight;
                     }
                 }
             }
@@ -245,7 +251,8 @@ public class Enemy : MovingObject
                         {
                             if (ChcekForWall(i, j) == true) 
                             {
-                                score -= .2;
+                                //score -= 0.2;
+                                score -= weight;
                             }
                         }
                     }
@@ -260,7 +267,8 @@ public class Enemy : MovingObject
                     {
                         if (ChcekForWall(i, j) == true) 
                         {
-                            score -= .2;
+                            //score -= 0.2;
+                            score -= weight;
                         }
                     }
                 }
@@ -274,7 +282,8 @@ public class Enemy : MovingObject
                     {
                         if (ChcekForWall(i, j) == true) 
                         {
-                            score -= .2;
+                            //score -= 0.2;
+                            score -= weight;
                         }
                     }
                 }
@@ -288,12 +297,12 @@ public class Enemy : MovingObject
                     {
                         if (ChcekForWall(i, j) == true) 
                         {
-                            score -= .2;
+                            //score -= 0.2;
+                            score -= weight;
                         }
                     }
                 }
             }
-            //add the no wall
         }
         return score;
     }
