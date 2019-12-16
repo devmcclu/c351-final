@@ -182,12 +182,12 @@ public class Enemy : MovingObject
     {
         double score = 0;
         double weight = 0;
-        score -= Mathf.Sqrt(Mathf.Abs( state.enemyLoc.x - state.playerLoc.x ) + Mathf.Abs( state.enemyLoc.y - state.playerLoc.y ));
+        score -= Mathf.Sqrt(Mathf.Abs( state.enemyLocs[0].x - state.playerLoc.x ) + Mathf.Abs( state.enemyLocs[0].y - state.playerLoc.y ));
         //score -= Mathf.Abs(state.enemyLoc.x - state.playerLoc.x) - Mathf.Abs(state.enemyLoc.y - state.playerLoc.y);
-        weight = Mathf.Sqrt(Mathf.Pow(( state.enemyLoc.x - state.playerLoc.x ),2) + (Mathf.Pow(( state.enemyLoc.y - state.playerLoc.y ),2))) *0.1;
+        weight = Mathf.Sqrt(Mathf.Pow(( state.enemyLocs[0].x - state.playerLoc.x ),2) + (Mathf.Pow(( state.enemyLocs[0].y - state.playerLoc.y ),2))) *0.1;
         
-        if ((state.enemyLoc.x < GameManager.instance.boardScript.columns) && (state.playerLoc.x < GameManager.instance.boardScript.columns) &&
-            (state.enemyLoc.y < GameManager.instance.boardScript.rows) && (state.playerLoc.y < GameManager.instance.boardScript.rows)){
+        if ((state.enemyLocs[0].x < GameManager.instance.boardScript.columns) && (state.playerLoc.x < GameManager.instance.boardScript.columns) &&
+            (state.enemyLocs[0].y < GameManager.instance.boardScript.rows) && (state.playerLoc.y < GameManager.instance.boardScript.rows)){
             //Same x
             if(state.playerLoc.x == state.enemyLocs[0].x)
             {
