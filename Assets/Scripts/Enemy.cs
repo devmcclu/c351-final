@@ -19,6 +19,8 @@ public class Enemy : MovingObject
 
     public int speed = 1;
 
+    public int minimaxDepth = 4;
+
     public int id; //The enemy's id number
 
     protected override void Start()
@@ -73,7 +75,7 @@ public class Enemy : MovingObject
 
         if (useMinimax)
         {
-            object[] minimaxResult = Minimax(CurrentState(), 3, -100000000, 100000000);
+            object[] minimaxResult = Minimax(CurrentState(), minimaxDepth, -100000000, 100000000);
 
             List<Vector2Int> bestMoves = (List<Vector2Int>)minimaxResult[1];
 
