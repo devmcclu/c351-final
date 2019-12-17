@@ -83,7 +83,8 @@ public class Player : MovingObject
 
     private void Restart()
     {
-        SceneManager.LoadScene(0);
+        //SceneManager.LoadScene(0);
+        GameManager.instance.GameOver();
     }
 
     public void HealthLoss(int loss)
