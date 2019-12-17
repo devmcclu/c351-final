@@ -24,6 +24,12 @@ public class Player : MovingObject
     // Update is called once per frame
     void Update()
     {
+        //Quit when the player hits escape
+        if (Input.GetKey("escape"))
+        {
+            Application.Quit();
+        }
+
         if(!GameManager.instance.playersTurn){
             return;
         }
