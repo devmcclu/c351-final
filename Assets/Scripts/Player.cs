@@ -97,13 +97,13 @@ public class Player : MovingObject
         healthText.text = "Health: " + health;
     }
 
-    private void CheckIfGameOver ()
+    private void CheckIfGameOver()
     {
         //Check if health total is less than or equal to zero.
         if (health <= 0) 
         {
             //Call the GameOver function of GameManager.
-            GameManager.instance.GameOver ();
+            GameManager.instance.GameOver();
         }
     }
 }

@@ -60,7 +60,8 @@ public class GameManager : MonoBehaviour
 
     public void GameOver()
     {
-        enabled = false;
+        Application.Quit();
+        //enabled = false;
     }
 
     // Update is called once per frame
