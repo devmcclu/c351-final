@@ -7,7 +7,6 @@ public class Enemy : MovingObject
 {
     //How much damage is done to the player
     public int playerDamage;
-
     //Where the player is on the board
     private Transform target;
     //If it is the enemy turn or not
@@ -16,11 +15,11 @@ public class Enemy : MovingObject
     private bool useMinimax = true;
     //Whether or not the zombies should skip every alternate turn
     public static bool skipEveryOtherTurn = false;
-
     public int speed = 1;
-
+    //Depth for the minimax
     public int minimaxDepth = 4;
-
+    //Choose between Taxicab, Modified Taxicab, and "Basic"
+    public int heuristicChoice = 1;
     public int id; //The enemy's id number
 
     protected override void Start()
@@ -194,9 +193,17 @@ public class Enemy : MovingObject
 
     private double heuristic(State state)
     {
-        return taxicabHeuristic(state) + 10*state.healthLost;
-        //return modifiedTaxicabHeuristic(state) + 10*state.healthLost - spreadHeuristic(state)/10;
-        //return basicHeuristic(state) + 10*state.healthLost;
+        switch(heuristicChoice)
+        {
+            case 1:
+                return taxicabHeuristic(state) + 10*state.healthLost;
+            case 2:
+                return modifiedTaxicabHeuristic(state) + 10*state.healthLost - spreadHeuristic(state)/10;
+            case 3:
+                return basicHeuristic(state) + 10*state.healthLost;
+            default:
+                return taxicabHeuristic(state) + 10*state.healthLost;
+        }
     }
 
     private double spreadHeuristic(State state)
